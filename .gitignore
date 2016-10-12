@@ -1,7 +1,8 @@
 
 # Created by https://www.gitignore.io/api/ros,python,linux
-.catkin_workspace
 ### ROS ###
+.catkin_workspace
+devel/
 build/
 bin/
 lib/
