@@ -14,12 +14,13 @@
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="/home/murat/Desktop/warehouse.sdf"/>
+    <arg name="world_name" value="$(find warehouse_slam)/models/warehouse.sdf"/>
   </include>
 
   <!-- Oh, you wanted a robot? -->
   <include file="$(find fetch_gazebo)/launch/include/$(arg robot).launch.xml" />
   <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" />
+  <node name="rviz" pkg="rviz" type="rviz" />
   <!-- <include file="$(find fetch_gazebo_demo)/launch/fetch_nav.launch" /> -->
   <include file="$(find fetch_navigation)/launch/build_map.launch" />
 </launch>
