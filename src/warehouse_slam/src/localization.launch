@@ -1,0 +1,66 @@
+<launch>
+    <arg name="sim" default="true" />
+    <arg name="map_file" default="$(find fetch_gazebo_demo)/maps/test_zone.yaml" />
+    <!--  Fetch Simulation -->
+
+    <include file="$(find fetch_gazebo)/launch/playground.launch" if="$(arg sim)"/>
+    <include file="$(find fetch_navigation)/launch/fetch_nav.launch" >
+        <arg name="map_file" value="$(arg map_file)" />
+    </include>
+
+    <!--  RViz-->
+    <node name="rviz" pkg="rviz" type="rviz" />
+
+    <!--  EKF Localization Configuration-->
+    <!-- Define frames of interest -->
+    <param name="map_frame" value="map" />
+    <param name="odom_frame" value="odom" />
+    <param name="base_link_frame" value="base_link" />
+    <param name="world_frame" value="odom" />
+
+    <!-- Create configuration parameters for the node -->
+    <param name="two_d_mode" value="true" />
+    <param name="print_diagnostics" value="true" />
+    <param name="use_control" value="true" />
+
+    <!-- <param name="debug" value="true" /> -->
+
+
+    <!-- Specify the sensors -->
+    <!-- Consider optical flow too -->
+    <!-- <param name="imu0" value="/imu" unless="$(arg sim)"/> -->
+    <param name="odom0" value="/odom" />
+    <param name="laser0" value="/amcl_pose" />
+
+    <!-- Initial Covariances -->
+    <rosparam param="initial_estimate_covariance">
+        [0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0,
+         0, 0, 0]
+    </rosparam>
+
+    <rosparam param="initial_estimate_covariance">
+        [0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0,
+         0, 0, 0]
+    </rosparam>
+
+    <!--  Check hardware imu readings ..-->
+
+    <!--  Configure odom -->
+    <rosparam param="odom0_config">[true,  true,  false, false, false, true,
+                                    true,  true, false, false, false, true,
+                                    false, false, false]</rosparam>
+
+    <!-- Configure laser -->
+    <rosparam param="laser0_config">[true,  true,  false, true, true, true,
+                                    false,  false, false, false, false, true,
+                                    false, false, false]</rosparam>
+
+    <rosparam param="control_config">[true, true, false,
+                                     false, false, true]</rosparam>
+
+
+    <node name="localization" pkg="robot_localization" type="ekf_localization_node" output="screen" />
+
+</launch>
